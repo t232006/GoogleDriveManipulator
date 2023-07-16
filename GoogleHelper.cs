@@ -15,10 +15,10 @@ namespace GoogleDriveManipulator
 	class GoogleHelper
 	{
 		private readonly string token;
-		private readonly string filename;
-		private DriveService driveService;
+		internal readonly string filename;
+		internal DriveService driveService;
 		private UserCredential credentials;
-		private string FileId;
+		//internal string FileId;
 
 		public GoogleHelper(string _token, string _fileName)
 		{
@@ -29,7 +29,7 @@ namespace GoogleDriveManipulator
 		public string ApplicationName { get; private set; } = "GoogleNotepad";
 		public string[] Scopes { get; private set; } = new string[] { DriveService.Scope.Drive };
 
-		internal async Task<String> Start()
+		internal async Task Start()
 		{
 			string credentialPath = Path.Combine(Environment.CurrentDirectory, ".credentials", ApplicationName);
 			using (var stream = new FileStream(token, FileMode.Open, FileAccess.Read))
@@ -47,30 +47,8 @@ namespace GoogleDriveManipulator
 				HttpClientInitializer = this.credentials,
 				ApplicationName = ApplicationName
 			});
+			
 
-			var request = this.driveService.Files.List();
-			var response = request.Execute();
-			//List<string> list = new List<string>();
-			string list = "";
-			foreach (var file in response.Files)
-			{
-				list += String.Format("ID:{0}, Name:{1} \n", file.Id, file.Name);
-				if (file.Name == filename)
-				{
-					FileId = file.Id;
-					break;
-				}
-
-			}
-			//var textFile = driveService.Files.Get(FileId).Execute();
-			//return textFile;
-			return list;
-			/*
-			if (!string.IsNullOrEmpty(this.FileId))
-			{
-				return true;
-			}
-			return false;*/
 
 		}
 	}
