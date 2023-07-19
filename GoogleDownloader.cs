@@ -13,12 +13,12 @@ namespace GoogleDriveManipulator
 	{
 		public FileList response;
 		public string[] list;
-		public GoogleDownloader(string _token, string _fileName) : base(_token, _fileName)
+		GoogleDownloader(string _token) : base(_token)
 		{
 		}
-		public static async Task<GoogleDownloader> Create(string token, string fileName)
+		public static async Task<GoogleDownloader> Create(string token)
 		{
-			var instance = new GoogleDownloader(token, fileName);
+			var instance = new GoogleDownloader(token);
 			await instance.Start();
 			//instance.driveService
 			

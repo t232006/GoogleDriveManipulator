@@ -10,38 +10,44 @@ namespace GoogleDriveManipulator
 {
 	class GoogleUploader : GoogleHelper
 	{
-		public GoogleUploader(string _token, string _fileName, string _filePath, out string _output) : base(_token, _fileName)
+		public string output;
+		GoogleUploader(string _token, string _filePath) : base(_token)
 		{
-			_output = "";
+		}
+		public static async Task<GoogleUploader> Create(string token, string filePath)
+		{
+			GoogleUploader instance = new GoogleUploader(token, filePath);
+			instance.output = "";
 			try
 			{
-				Start();
+				await instance.Start();
 				var fileMetadata = new Google.Apis.Drive.v3.Data.File()
 				{
-					Name = "Report",
+					Name = Path.GetFileName(filePath),
 					MimeType = "application / octet - stream"
 				};
 				FilesResource.CreateMediaUpload request;
-				using (var stream = new FileStream(_filePath, FileMode.Open))
+				using (var stream = new FileStream(filePath, FileMode.Open))
 				{
-					request = driveService.Files.Create(fileMetadata, stream, "text/csv");
+					request = instance.driveService.Files.Create(fileMetadata, stream, "text/csv");
 					request.Fields = "id";
 					request.Upload();
 				}
 				var file = request.ResponseBody;
-				_output = file.Id;
+				instance.output = file.Id;
 			}
 			catch (Exception e)
 			{
 				if (e is AggregateException)
 				{
-					_output = "Credential not found";
+					instance.output = "Credential not found";
 				}
 				if (e is FileNotFoundException)
 				{
-					_output = "File not found";
+					instance.output = "File not found";
 				}
 			}
+			return instance;
 		}
 	}
 

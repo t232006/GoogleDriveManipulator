@@ -10,7 +10,7 @@ namespace GoogleDriveManipulator
 	class Program
 	{
 		static readonly string token = @"h:\программки\GoogleDriveManipulator\client_secret.json";
-		static readonly string filename = "dictionaryCopy.db";
+		static readonly string filename = "лекции по информатике.docx";
 		static void Main(string[] args)
 		{
 			void Menu()
@@ -36,7 +36,9 @@ namespace GoogleDriveManipulator
 							Console.WriteLine("Input file path");
 							string path = Path.Combine(Console.ReadLine(), filename);
 							string output;
-							GoogleUploader gu = new GoogleUploader(token, filename, path, out output);
+							GoogleUploader gu = GoogleUploader.Create(token, path).Result;
+							output = gu.output;
+							Console.WriteLine(output);
 							break;
 						}
 					case '2':
@@ -44,7 +46,7 @@ namespace GoogleDriveManipulator
 							string path = @"h:\";
 							string Filename;
 							int num;
-							var gd = GoogleDownloader.Create(token, filename).Result;
+							var gd = GoogleDownloader.Create(token).Result;
 							foreach (string li in gd.list)
 								Console.WriteLine(li);
 							Console.Write("Select number");

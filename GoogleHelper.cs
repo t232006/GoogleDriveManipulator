@@ -20,10 +20,10 @@ namespace GoogleDriveManipulator
 		private UserCredential credentials;
 		//internal string FileId;
 
-		public GoogleHelper(string _token, string _fileName)
+		public GoogleHelper(string _token)
 		{
 			this.token = _token;
-			this.filename = _fileName;
+			//this.filename = _fileName;
 		}
 
 		public string ApplicationName { get; private set; } = "GoogleNotepad";
