@@ -41,13 +41,22 @@ namespace GoogleDriveManipulator
 						}
 					case '2':
 						{
+							string path = @"h:\";
+							string Filename;
 							int num;
 							var gd = GoogleDownloader.Create(token, filename).Result;
 							foreach (string li in gd.list)
 								Console.WriteLine(li);
 							Console.Write("Select number");
 							num = Convert.ToInt32(Console.ReadLine());
-							gd.DownloadFile(gd.response.Files[num].Id);
+							Filename = gd.response.Files[num-2].Name;
+							path += Filename;
+							MemoryStream MemStr = gd.DownloadFile(gd.response.Files[num].Id);
+							
+							using (FileStream FileStr = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write))
+							{
+								MemStr.WriteTo(FileStr);
+							}	
 							break;
 						}
 				}

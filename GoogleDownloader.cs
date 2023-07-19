@@ -28,10 +28,12 @@ namespace GoogleDriveManipulator
 			//List<string> list = new List<string>();
 			//instance.list = "";
 			int k = 1;
+			string[] templist = new string[instance.response.Files.Count + 1];
 			foreach (var file in instance.response.Files)
 			{
-				instance.list[k++] = String.Format("{2}) ID:{0}, Name:{1} \n", file.Id, file.Name, k);
+				templist[k++] = String.Format("{2}) ID:{0}, Name:{1}", file.Id, file.Name, k);
 			}
+			instance.list = templist;
 			return instance;
 		}
 		public MemoryStream DownloadFile(string FileId)
@@ -57,9 +59,9 @@ namespace GoogleDriveManipulator
 							Console.WriteLine("Download failed.");
 							break;
 						}
-				}
-				request.Download(stream);
+				}	
 			};
+			request.Download(stream);
 			return stream;
 		}
 
